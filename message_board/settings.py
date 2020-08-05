@@ -22,10 +22,10 @@ load_dotenv(find_dotenv())
 # Development: Use the DB name defined in the `.env` file
 # Production: Let dj_database_url figure it out based on the config
 if os.getenv('ENV') == 'development':
-  DB_NAME = os.getenv('DB_NAME_DEV')
+  DB_NAME = os.getenv('message_board_dev')
   DB = {
       'ENGINE': 'django.db.backends.postgresql',
-      'NAME': DB_NAME,
+      'NAME': 'message_board',
   }
   DEBUG = True
   CORS_ORIGIN_WHITELIST = ['http://localhost:7165']

@@ -1,2 +1,2 @@
-from .mango import Mango
+from .post import Post
 from .user import User
