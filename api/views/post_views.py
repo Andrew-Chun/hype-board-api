@@ -15,8 +15,8 @@ class Posts(generics.ListCreateAPIView):
     permission_classes=(IsAuthenticated,)
     def get(self, request):
         """Index request"""
-        # posts = Post.objects.all()
-        posts = Post.objects.filter(owner=request.user.id)
+        posts = Post.objects.all()
+        # posts = Post.objects.filter(owner=request.user.id)
         data = PostSerializer(posts, many=True).data
         return Response(data)
 
@@ -47,7 +47,7 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     def delete(self, request, pk):
         """Delete request"""
         post = get_object_or_404(Post, pk=pk)
-        if not request.user.id == post['owner']:
+        if not request.user.id == post.owner.id:
             raise PermissionDenied('Unauthorized, you do not own this post')
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -61,7 +61,7 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
         # Locate Post
         post = get_object_or_404(Post, pk=pk)
         # Check if user is  the same
-        if not request.user.id == post['owner']:
+        if not request.user.id == post.owner.id:
             raise PermissionDenied('Unauthorized, you do not own this post')
 
         # Add owner to data object now that we know this user owns the resource
