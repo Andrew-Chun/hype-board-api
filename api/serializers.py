@@ -3,12 +3,18 @@ from rest_framework import serializers
 
 from .models.post import Post
 from .models.user import User
+from .models.comment import Comment
 
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ('id', 'title', 'body', 'created_at', 'updated_at', 'owner')
+        fields = '__all__'
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

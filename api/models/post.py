@@ -1,6 +1,7 @@
 from django.db import models
 
 from .user import User
+from .comment import Comment
 
 # Create your models here.
 class Post(models.Model):
@@ -10,6 +11,7 @@ class Post(models.Model):
   body = models.CharField(max_length=140)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
+
   owner = models.ForeignKey(
       User,
       on_delete=models.CASCADE
@@ -26,5 +28,7 @@ class Post(models.Model):
         'title': self.title,
         'body': self.body,
         'created_at': self.created_at,
-        'updated_at': self.updated_at
+        'updated_at': self.updated_at,
+        'owner': self.owner,
+        'comment': self.comment
     }
