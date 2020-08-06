@@ -13,6 +13,7 @@ from ..serializers import PostSerializer, UserSerializer
 # Create your views here.
 class Posts(generics.ListCreateAPIView):
     permission_classes=(IsAuthenticated,)
+    serializer_class = PostSerializer
     def get(self, request):
         """Index request"""
         posts = Post.objects.all()
@@ -20,7 +21,7 @@ class Posts(generics.ListCreateAPIView):
         data = PostSerializer(posts, many=True).data
         return Response(data)
 
-    serializer_class = PostSerializer
+
     def post(self, request):
         """Create request"""
         # Add user to request object
