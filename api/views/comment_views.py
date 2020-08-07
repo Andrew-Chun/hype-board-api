@@ -14,15 +14,14 @@ class Comments(APIView):
     serializer_class = CommentSerializer
     def get(self, request):
         """Index Request"""
-        print(request.session)
-        comments = Comment.objects.all()[:10]
+        comments = Comment.objects.all()
         # data = CommentReadSerializer(comments, many=True).data
         data = CommentSerializer(comments, many=True).data
         return Response(data)
 
     def post(self, request):
         """Post request"""
-        print(request.data)
+        request.data['comment']['owner'] = request.user.id
         comment = CommentSerializer(data=request.data['comment'])
         if comment.is_valid():
             b = comment.save()
@@ -39,17 +38,32 @@ class CommentDetail(APIView):
         data = CommentSerializer(comment).data
         return Response(data)
 
-    def patch(self, request, pk):
+    def partial_update(self, request, pk):
         """Update Request"""
-        comment = get_object_or_404(Comment, pk=pk)
-        ms = CommentSerializer(comment, data=request.data['comment'])
+        # Remove owner from request object
+        if request.data['comment'].get('owner', False):
+            del request.data['comment']['owner']
+
+        # Locate Post
+        comment = get_object_or_404(Post, pk=pk)
+        # Check if user is  the same
+        if not request.user.id == comment.owner.id:
+            raise PermissionDenied('Unauthorized, you do not own this comment')
+
+        # Add owner to data object now that we know this user owns the resource
+        request.data['comment']['owner'] = request.user.id
+        # Validate updates with serializer
+        ms = PostSerializer(comment, data=request.data['comment'])
         if ms.is_valid():
             ms.save()
+            print(ms)
             return Response(ms.data)
         return Response(ms.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        """Delete Request"""
-        comment = get_object_or_404(Comment, pk=pk)
+        """Delete request"""
+        comment = get_object_or_404(Post, pk=pk)
+        if not request.user.id == comment.owner.id:
+            raise PermissionDenied('Unauthorized, you do not own this comment')
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

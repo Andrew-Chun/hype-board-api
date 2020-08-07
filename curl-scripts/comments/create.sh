@@ -5,9 +5,10 @@ curl "http://localhost:8000/comments/" \
   --header "Authorization: Token ${TOKEN}" \
   --data '{
     "comment": {
+      "body": "'"${BODY}"'",
       "user_id": "'"${USER_ID}"'",
-      "post_id": "'"${POST_ID}"'",
-      "body": "'"${BODY}"'"
+      "post_id": "'"${POST_ID}"'"
+
     }
   }'
 

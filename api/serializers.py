@@ -6,16 +6,6 @@ from .models.user import User
 from .models.comment import Comment
 
 
-class PostSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Post
-        fields = '__all__'
-
-class CommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
-        fields = '__all__'
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
@@ -33,3 +23,15 @@ class ChangePasswordSerializer(serializers.Serializer):
     model = User
     old = serializers.CharField(required=True)
     new = serializers.CharField(required=True)
+
+class PostSerializer(serializers.ModelSerializer):
+    owner = UserSerializer(read_only=True)
+    class Meta:
+        model = Post
+        fields = '__all__'
+
+class CommentSerializer(serializers.ModelSerializer):
+    owner = UserSerializer(read_only=True)
+    class Meta:
+        model = Comment
+        fields = '__all__'
