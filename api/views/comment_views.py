@@ -2,8 +2,11 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.exceptions import PermissionDenied
 from rest_framework import status
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user, authenticate, login, logout
+from django.middleware.csrf import get_token
 
 from ..models.comment import Comment
 from ..serializers import CommentSerializer
@@ -38,6 +41,14 @@ class CommentDetail(APIView):
         data = CommentSerializer(comment).data
         return Response(data)
 
+    def delete(self, request, pk):
+        """Delete request"""
+        comment = get_object_or_404(Post, pk=pk)
+        if not request.user.id == comment.owner.id:
+            raise PermissionDenied('Unauthorized, you do not own this comment')
+        comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     def partial_update(self, request, pk):
         """Update Request"""
         # Remove owner from request object
@@ -59,11 +70,3 @@ class CommentDetail(APIView):
             print(ms)
             return Response(ms.data)
         return Response(ms.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk):
-        """Delete request"""
-        comment = get_object_or_404(Post, pk=pk)
-        if not request.user.id == comment.owner.id:
-            raise PermissionDenied('Unauthorized, you do not own this comment')
-        comment.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)

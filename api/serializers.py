@@ -7,9 +7,10 @@ from .models.comment import Comment
 
 
 class UserSerializer(serializers.ModelSerializer):
+    # posts: PostSerializer(read_only=True)
     class Meta:
         model = get_user_model()
-        fields = ('id', 'email', 'password')
+        fields = ('id', 'email', 'password', 'posts')
         extra_kwargs = {'password': {'write_only': True, 'min_length': 5}}
 
     def create(self, validated_data):

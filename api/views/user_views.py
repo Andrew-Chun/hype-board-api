@@ -6,8 +6,8 @@ from rest_framework import status, generics
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user, authenticate, login, logout
 
-from ..serializers import UserSerializer, ChangePasswordSerializer
 from ..models.user import User
+from ..serializers import UserSerializer, ChangePasswordSerializer
 
 class SignUp(generics.CreateAPIView):
     authentication_classes = ()
@@ -70,3 +70,19 @@ class ChangePassword(generics.UpdateAPIView):
             return Response({}, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class Users(generics.ListAPIView):
+  permission_classes=(IsAuthenticated,)
+  serializer_class = UserSerializer
+  def get(self, request):
+      """Index request"""
+      users = User.objects.all()
+      data = UserSerializer(users, many=True).data
+      return Response(data)
+
+class UserDetail(generics.RetrieveAPIView):
+  def get(self, request, pk):
+      """Show request"""
+      user = get_object_or_404(User, pk=pk)
+      data = UserSerializer(user).data
+      return Response(data)
