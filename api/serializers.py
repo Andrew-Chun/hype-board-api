@@ -7,7 +7,6 @@ from .models.comment import Comment
 
 
 class UserSerializer(serializers.ModelSerializer):
-    # posts: PostSerializer(read_only=True)
     class Meta:
         model = get_user_model()
         fields = ('id', 'email', 'password')
@@ -25,11 +24,6 @@ class ChangePasswordSerializer(serializers.Serializer):
     old = serializers.CharField(required=True)
     new = serializers.CharField(required=True)
 
-# class UserReadSerializer(serializers.ModelSerializer):
-#   class Meta:
-#     model = User
-#     fields = '__all__'
-
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
@@ -42,7 +36,6 @@ class PostReadSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CommentSerializer(serializers.ModelSerializer):
-    # owner = UserSerializer(read_only=True)
     class Meta:
         model = Comment
         fields = '__all__'
@@ -52,3 +45,8 @@ class CommentReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
+
+class UserReadSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = User
+    fields = ('id', 'email', 'posts', 'comments')

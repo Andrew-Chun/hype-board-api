@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user, authenticate, login, logout
 
 from ..models.user import User
-from ..serializers import UserSerializer, ChangePasswordSerializer
+from ..serializers import UserSerializer, UserReadSerializer, ChangePasswordSerializer
 
 class SignUp(generics.CreateAPIView):
     authentication_classes = ()
@@ -77,12 +77,12 @@ class Users(generics.ListAPIView):
   def get(self, request):
       """Index request"""
       users = User.objects.all()
-      data = UserSerializer(users, many=True).data
+      data = UserReadSerializer(users, many=True).data
       return Response(data)
 
 class UserDetail(generics.RetrieveAPIView):
   def get(self, request, pk):
       """Show request"""
       user = get_object_or_404(User, pk=pk)
-      data = UserSerializer(user).data
+      data = UserReadSerializer(user).data
       return Response(data)
