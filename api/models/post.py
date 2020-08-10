@@ -1,6 +1,6 @@
 from django.db import models
 
-from .user import User
+# from .user import User
 
 # Create your models here.
 class Post(models.Model):
@@ -11,11 +11,11 @@ class Post(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
-  owner = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
+  owner = models.ForeignKey('User', on_delete=models.CASCADE)
 
   def __str__(self):
     # This must return a string
-    return f"Title:'{self.title}' Body: {self.body} created_at: {self.created_at} updated_at: {self.updated_at}"
+    return f"Title:'{self.title}' Body: {self.body}"
 
   def as_dict(self):
     """Returns dictionary version of Post models"""
@@ -23,8 +23,5 @@ class Post(models.Model):
         'id': self.id,
         'title': self.title,
         'body': self.body,
-        'created_at': self.created_at,
-        'updated_at': self.updated_at,
-        'owner': self.owner,
-        'comment': self.comment
+        'owner': self.owner
     }

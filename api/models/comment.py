@@ -1,6 +1,7 @@
 from django.db import models
 
 from .user import User
+from .post import Post
 
 class Comment(models.Model):
   body = models.CharField(max_length=140)
@@ -8,7 +9,7 @@ class Comment(models.Model):
   updated_at = models.DateTimeField(auto_now=True)
 
   owner = models.ForeignKey(User, on_delete=models.CASCADE)
-  post_id = models.ForeignKey('Post', related_name='comment', on_delete=models.CASCADE)
+  post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
 
   def __str__(self):
     return self.body
@@ -18,8 +19,4 @@ class Comment(models.Model):
     return {
         'id': self.id,
         'body': self.body,
-        'created_at': self.created_at,
-        'updated_at': self.updated_at,
-        'owner': self.owner,
-        'post_id': self.post_id
     }

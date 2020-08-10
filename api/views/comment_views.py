@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -9,7 +8,7 @@ from django.contrib.auth import get_user, authenticate, login, logout
 from django.middleware.csrf import get_token
 
 from ..models.comment import Comment
-from ..serializers import CommentSerializer
+from ..serializers import CommentSerializer, CommentReadSerializer
 
 # Create your views here.
 class Comments(APIView):
@@ -18,8 +17,8 @@ class Comments(APIView):
     def get(self, request):
         """Index Request"""
         comments = Comment.objects.all()
-        # data = CommentReadSerializer(comments, many=True).data
-        data = CommentSerializer(comments, many=True).data
+        data = CommentReadSerializer(comments, many=True).data
+        # data = CommentSerializer(comments, many=True).data
         return Response(data)
 
     def post(self, request):
@@ -37,13 +36,13 @@ class CommentDetail(APIView):
     def get(self, request, pk):
         """Show request"""
         comment = get_object_or_404(Comment, pk=pk)
-        # data = CommentReadSerializer(comment).data
-        data = CommentSerializer(comment).data
+        data = CommentReadSerializer(comment).data
+        # data = CommentSerializer(comment).data
         return Response(data)
 
     def delete(self, request, pk):
         """Delete request"""
-        comment = get_object_or_404(Post, pk=pk)
+        comment = get_object_or_404(Comment, pk=pk)
         if not request.user.id == comment.owner.id:
             raise PermissionDenied('Unauthorized, you do not own this comment')
         comment.delete()

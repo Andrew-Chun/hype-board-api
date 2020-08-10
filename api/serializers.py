@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
     # posts: PostSerializer(read_only=True)
     class Meta:
         model = get_user_model()
-        fields = ('id', 'email', 'password', 'posts')
+        fields = ('id', 'email', 'password')
         extra_kwargs = {'password': {'write_only': True, 'min_length': 5}}
 
     def create(self, validated_data):
@@ -25,13 +25,29 @@ class ChangePasswordSerializer(serializers.Serializer):
     old = serializers.CharField(required=True)
     new = serializers.CharField(required=True)
 
+# class UserReadSerializer(serializers.ModelSerializer):
+#   class Meta:
+#     model = User
+#     fields = '__all__'
+
 class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = '__all__'
+
+class PostReadSerializer(serializers.ModelSerializer):
     owner = UserSerializer(read_only=True)
     class Meta:
         model = Post
         fields = '__all__'
 
 class CommentSerializer(serializers.ModelSerializer):
+    # owner = UserSerializer(read_only=True)
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+class CommentReadSerializer(serializers.ModelSerializer):
     owner = UserSerializer(read_only=True)
     class Meta:
         model = Comment
