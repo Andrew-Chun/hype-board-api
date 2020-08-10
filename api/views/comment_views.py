@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.exceptions import PermissionDenied
-from rest_framework import status
+from rest_framework import generics, status
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user, authenticate, login, logout
 from django.middleware.csrf import get_token
@@ -11,7 +11,7 @@ from ..models.comment import Comment
 from ..serializers import CommentSerializer, CommentReadSerializer
 
 # Create your views here.
-class Comments(APIView):
+class Comments(generics.ListCreateAPIView):
     permission_classes=(IsAuthenticated,)
     serializer_class = CommentSerializer
     def get(self, request):
@@ -31,7 +31,7 @@ class Comments(APIView):
         else:
             return Response(comment.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class CommentDetail(APIView):
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes=(IsAuthenticated,)
     def get(self, request, pk):
         """Show request"""
@@ -54,8 +54,8 @@ class CommentDetail(APIView):
         if request.data['comment'].get('owner', False):
             del request.data['comment']['owner']
 
-        # Locate Post
-        comment = get_object_or_404(Post, pk=pk)
+        # Locate Comment
+        comment = get_object_or_404(Comment, pk=pk)
         # Check if user is  the same
         if not request.user.id == comment.owner.id:
             raise PermissionDenied('Unauthorized, you do not own this comment')
@@ -63,7 +63,7 @@ class CommentDetail(APIView):
         # Add owner to data object now that we know this user owns the resource
         request.data['comment']['owner'] = request.user.id
         # Validate updates with serializer
-        ms = PostSerializer(comment, data=request.data['comment'])
+        ms = CommentSerializer(comment, data=request.data['comment'])
         if ms.is_valid():
             ms.save()
             print(ms)

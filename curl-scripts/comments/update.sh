@@ -6,8 +6,9 @@ curl "http://localhost:8000/comments/${ID}/" \
   --header "Content-Type: application/json" \
   --header "Authorization: Token ${TOKEN}" \
   --data '{
-    "post": {
-      "body": "'"${BODY}"'"
+    "comment": {
+      "body": "'"${BODY}"'",
+      "post_id": "'"${POST_ID}"'"
     }
   }'
 

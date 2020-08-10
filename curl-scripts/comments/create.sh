@@ -8,7 +8,6 @@ curl "http://localhost:8000/comments/" \
       "body": "'"${BODY}"'",
       "user_id": "'"${USER_ID}"'",
       "post_id": "'"${POST_ID}"'"
-
     }
   }'
 
