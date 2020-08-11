@@ -5,47 +5,69 @@ An API built using a backend Django server using a PostgreSQL database hosted on
 
 The Hype-Board server accepts HTTP requests from the client and sends back appropriate JSON responses for user authentication, posts, and comments.
 
-## Links
+The API enables users to:
+  1. Sign-up, sign-in, change password, and sign-out of their accounts.
+  2. Create, view, update, and delete their own posts.
+  3. Create, view, update, and delete their own comments.
+  4. View other users in the database
+
+## Setup Instructions
+1. Fork and clone this repository.
+2. Run ```pipenv install``` to install all dependencies
+3. Run ```pipenv shell``` to open up the development enviornment
+4. Run ``` pipenv runserver``` to run the server
+
+## Important Links
 - Client Repo: https://github.com/Andrew-Chun/hype-board-client
 - Deployed API: https://hype-board.herokuapp.com/
 - Deployed Client: https://andrew-chun.github.io/hype-board-client/
 
-## List of Technologies Used
+## Planning Story
+The MVP of this project originally encompassed users being able to CRUD posts.
+This process included creating the model, serializing the model data, creating a url path for the resource, and defining different views for the response.
+
+A one-to-many relationship was established between Users and Posts by defining ```owner``` (User) as a foreign key on the Post model.
+
+A one-to-many relationship was established between Users and Comments by referencing User as a foreign key Comment model. Additionally, ```post_id``` as a foreign key on the Comments model to establish a relationship between Comments and Posts, as Posts can have many comments.
+
+Finally, I added two GET views for Users in order to retrieve other users in the database.
+
+## Technologies Used
 - Python
 - Django
 - PostgreSQL
 - Heroku
 
-## Catalog of Routes for API
-- path('posts/', Posts.as_view(), name='posts')
-  - Methods: GET, POST
-- path('posts/<int:pk>/', PostDetail.as_view(), name='post_detail')
-  - Methods: GET, DELETE, PATCH
-- path('comments/', Comments.as_view(), name='comments')
-  - Methods: GET, POST
-- path('comments/<int:pk>/', CommentDetail.as_view(), name='comment_detail')
-  - Methods: GET, DELETE, PATCH
-- path('sign-up/', SignUp.as_view(), name='sign-up')
-  - Method: POST
-- path('sign-in/', SignIn.as_view(), name='sign-in')
-  - Method: POST
-- path('sign-out/', SignOut.as_view(), name='sign-out')
-  - Method: DELETE
-- path('change-pw/', ChangePassword.as_view(), name='change-pw')
-  - Method: PATCH
-- path('users/', Users.as_view(), name='users')
-  - Method: GET
-- path('users/<int:pk>/', UserDetail.as_view(), name='user_detail')
-  - Method: GET
-
-## Setup and Installation Instructions
-
+## Catalog of Routes
+Verb         |	URI Pattern
+------------ | -------------
+POST | /sign-up/
+POST  | /sign-in/
+DELETE  | /sign-out/
+PATCH  | /change-pw/
+  |
+GET | /posts/
+POST  |  /posts/
+  |
+GET | /posts/:id/
+DELETE  |  /posts/:id/
+PATCH  |  /posts/:id/
+  |
+GET | /comments/
+POST | /comments/
+  |
+GET | /comments/:id
+DELETE | /comments/:id
+POST | /comments/:id
+  |
+GET  | /users/
+GET | /users/:id/
 
 ## Entity Relationship Diagram
-[Hype-Board ERD](https://i.imgur.com/ZZmVqvr.png)
+![Hype-Board ERD](https://i.imgur.com/ZZmVqvr.png)
 
 
-## Problems to be Solved in Future Iterations
+## Future Iterations
 -Adding topics/categories for posts
 
 -Comments on comments
