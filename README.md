@@ -45,21 +45,16 @@ POST | /sign-up/
 POST  | /sign-in/
 DELETE  | /sign-out/
 PATCH  | /change-pw/
-  |
 GET | /posts/
 POST  |  /posts/
-  |
 GET | /posts/:id/
 DELETE  |  /posts/:id/
 PATCH  |  /posts/:id/
-  |
 GET | /comments/
 POST | /comments/
-  |
 GET | /comments/:id
 DELETE | /comments/:id
 POST | /comments/:id
-  |
 GET  | /users/
 GET | /users/:id/
 
