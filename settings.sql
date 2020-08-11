@@ -1,2 +1,2 @@
-DROP DATABASE IF EXISTS message_board;
-CREATE DATABASE message_board;
+DROP DATABASE IF EXISTS hype_board;
+CREATE DATABASE hype_board;
