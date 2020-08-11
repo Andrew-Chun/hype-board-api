@@ -6,10 +6,9 @@ An API built using a backend Django server using a PostgreSQL database hosted on
 The Hype-Board server accepts HTTP requests from the client and sends back appropriate JSON responses for user authentication, posts, and comments.
 
 ## Links
-- Client Repo:
-
-- Deployed API:
-- Deployed Client:
+- Client Repo: https://github.com/Andrew-Chun/hype-board-client
+- Deployed API: https://hype-board.herokuapp.com/
+- Deployed Client: https://andrew-chun.github.io/hype-board-client/
 
 ## List of Technologies Used
 - Python
